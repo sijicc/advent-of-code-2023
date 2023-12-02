@@ -15,20 +15,24 @@ trait DayTrait
 
     public function run(): void
     {
-        print "Example part 1: " . $this->checkExamplePart1(). "\n";
-        print "Example part 2: " . $this->checkExamplePart2(). "\n";
-        print "Part 1: " . $this->part1($this->getInputFromFile()). "\n";
-        print "Part 2: " . $this->part2($this->getInputFromFile()). "\n";
+        try {
+            $this->printExample(1);
+            print "Part 1: " . $this->part1($this->getInputFromFile()) . "\n";
+            $this->printExample(2);
+            print "Part 2: " . $this->part2($this->getInputFromFile()) . "\n";
+        } catch (\Throwable $e) {
+            print $e->getMessage();
+        }
     }
 
     public function checkExamplePart1(): string
     {
-        return $this->examplePart1($this->getExamplePart1FromFile()) === $this->examplePart1Answer();
+        return $this->part1($this->getExamplePart1FromFile()) === $this->examplePart1Answer();
     }
 
     public function checkExamplePart2(): string
     {
-        return $this->examplePart2($this->getExamplePart2FromFile()) === $this->examplePart2Answer();
+        return $this->part2($this->getExamplePart2FromFile()) === $this->examplePart2Answer();
     }
 
     public function getInputFromFile(): string
@@ -50,5 +54,22 @@ trait DayTrait
         return file_get_contents(
             __DIR__ . "/../../public/input/Day{$this->paddedDay}/part2-example"
         );
+    }
+
+    public function printExample(int $part)
+    {
+        if($part === 1) {
+            $expected = $this->examplePart1Answer();
+            $actual = $this->part1($this->getExamplePart1FromFile());
+        } elseif($part === 2) {
+            $expected = $this->examplePart2Answer();
+            $actual = $this->part2($this->getExamplePart2FromFile());
+        } else {
+            throw new \Exception('Invalid part');
+        }
+
+        $isCorrect = $expected === $actual ? '✅' : '❌';
+
+        print "Example part {$part}: {$isCorrect}  answer: {$actual} expected: {$expected}\n";
     }
 }
