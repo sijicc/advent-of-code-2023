@@ -15,38 +15,29 @@ class Day02 implements Day
         $input = array_map(function ($game) {
             $game = trim($game);
 
-            $id = str_replace(
-                'Game ',
-                '',
-                explode(':', $game)[0]
-            );
-
-
-            $values = explode('; ', explode(': ', $game)[1]);
             $values = array_map(function ($value) {
                 $value = explode(', ', $value);
                 return array_map(fn($v) => [
                     'color' => explode(' ', $v)[1],
                     'number' => explode(' ', $v)[0],
                 ], $value);
-            }, $values);
+            }, explode('; ', explode(': ', $game)[1]));
 
             foreach ($values as $value) {
-                $red = array_sum(array_map(fn($v) => $v['color'] === 'red' ? $v['number'] : 0, $value));
-                if ($red > 12) {
+                if (12 < array_sum(array_map(fn($v) => $v['color'] === 'red' ? $v['number'] : 0, $value))) {
                     return 0;
-                }
-                $green = array_sum(array_map(fn($v) => $v['color'] === 'green' ? $v['number'] : 0, $value));
-                if ($green > 13) {
+                } elseif (13 < array_sum(array_map(fn($v) => $v['color'] === 'green' ? $v['number'] : 0, $value))) {
                     return 0;
-                }
-                $blue = array_sum(array_map(fn($v) => $v['color'] === 'blue' ? $v['number'] : 0, $value));
-                if ($blue > 14) {
+                } elseif (14 < array_sum(array_map(fn($v) => $v['color'] === 'blue' ? $v['number'] : 0, $value))) {
                     return 0;
                 }
             }
 
-            return $id;
+            return str_replace(
+                'Game ',
+                '',
+                explode(':', $game)[0]
+            );
         }, $input);
 
         return array_sum($input);
@@ -57,22 +48,13 @@ class Day02 implements Day
         $input = explode("\n", $input);
         $input = array_map(function ($game) {
             $game = trim($game);
-
-            $id = str_replace(
-                'Game ',
-                '',
-                explode(':', $game)[0]
-            );
-
-
-            $values = explode('; ', explode(': ', $game)[1]);
             $values = array_map(function ($value) {
                 $value = explode(', ', $value);
                 return array_map(fn($v) => [
                     'color' => explode(' ', $v)[1],
                     'number' => explode(' ', $v)[0],
                 ], $value);
-            }, $values);
+            }, explode('; ', explode(': ', $game)[1]));
 
             $red = [];
             $green = [];
